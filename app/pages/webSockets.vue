@@ -123,7 +123,9 @@ onUnmounted(() => {
         </div>
       </div>
     </main>
+    <NuxtLink to="/" class="home-link">Home</NuxtLink>
   </div>
+  
 </template>
 
 <style scoped>
@@ -136,6 +138,15 @@ onUnmounted(() => {
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+.home-link {
+  display: inline-block;
+  margin: 1.5rem auto;
+  padding: 0.5rem 1rem;
+  background: #04163c;
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
 }
 
 .dashboard-header {

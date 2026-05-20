@@ -111,10 +111,21 @@ onUnmounted(() => {
         </div>
       </div>
     </main>
+    <NuxtLink to="/" class="home-link">Home</NuxtLink>
   </div>
 </template>
 
 <style scoped>
+
+.home-link {
+  display: inline-block;
+  margin: 1.5rem auto;
+  padding: 0.5rem 1rem;
+  background: #04163c;
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+}
 .presence-container {
   max-width: 500px;
   margin: 2rem auto;
