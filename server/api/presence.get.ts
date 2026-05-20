@@ -9,12 +9,12 @@ export default defineEventHandler(() => {
     const lastHeartbeat = presenceStore.get(user.id) || null;
     
     const isOnline = lastHeartbeat !== null && (now - lastHeartbeat <= HEARTBEAT_TIMEOUT_MS);
-    console.log(lastHeartbeat);
+    // console.log(lastHeartbeat);
     return {
       id: user.id,
       name: user.name,
       isOnline,
-      
+
       lastSeen: lastHeartbeat || (now - 600000)
     };
   });
