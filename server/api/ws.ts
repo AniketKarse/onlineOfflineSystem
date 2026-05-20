@@ -1,6 +1,3 @@
-// server/api/ws.ts
-
-// Global state registers
 export const presenceStore = new Map<string, number>();
 const connectedPeers = new Set<any>();
 

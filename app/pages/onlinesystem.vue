@@ -2,7 +2,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 
-// Active logged-in user context session (Defaulted to Diana/User 4)
 const currentUserId = ref('4');
 
 interface UserPresence {
@@ -16,7 +15,6 @@ const presenceRawData = ref<UserPresence[]>([]);
 let heartbeatTimer: ReturnType<typeof setInterval> | null = null;
 let pollTimer: ReturnType<typeof setInterval> | null = null;
 
-// 1. Ingress Trigger: Send periodic heartbeat pings every 4 seconds
 const sendHeartbeat = async () => {
   try {
     await $fetch('/api/heartbeat', {
@@ -28,7 +26,6 @@ const sendHeartbeat = async () => {
   }
 };
 
-// 2. Egress Trigger: Fetch the state snapshot from the server
 const fetchPresenceData = async () => {
   try {
     const data = await $fetch<UserPresence[]>('/api/presence');
@@ -38,19 +35,17 @@ const fetchPresenceData = async () => {
   }
 };
 
-// Micro Requirement: Group online users first, then sort offline users by last seen recency
 const sortedDashboardUsers = computed(() => {
   return [...presenceRawData.value]
-    .filter(user => user.id !== currentUserId.value) // Exclude self from contact list
+    .filter(user => user.id !== currentUserId.value)
     .sort((a, b) => {
       if (a.isOnline === b.isOnline) {
-        return b.lastSeen - a.lastSeen; // Show recently active users first
+        return b.lastSeen - a.lastSeen;
       }
-      return (b.isOnline ? 1 : 0) - (a.isOnline ? 1 : 0); // Bubble true (online) above false (offline)
+      return (b.isOnline ? 1 : 0) - (a.isOnline ? 1 : 0);
     });
 });
 
-// Utility function to format relative timestamps cleanly
 const formatRelativeTime = (lastSeenEpoch: number) => {
   const diffMs = Date.now() - lastSeenEpoch;
   const mins = Math.floor(diffMs / 60000);
@@ -61,20 +56,18 @@ const formatRelativeTime = (lastSeenEpoch: number) => {
   return 'was online just now';
 };
 
-// Reset heartbeat immediately if the logged-in user is switched on the UI
 watch(currentUserId, () => {
   sendHeartbeat();
   fetchPresenceData();
 });
 
 onMounted(() => {
-  // Fire off initial actions immediately
   sendHeartbeat();
   fetchPresenceData();
 
   // Set up background timers
-  heartbeatTimer = setInterval(sendHeartbeat, 4000);   // Ingress interval (Comfortably inside 10s window)
-  pollTimer = setInterval(fetchPresenceData, 2000);   // Egress dashboard poll rate
+  heartbeatTimer = setInterval(sendHeartbeat, 4000);   
+  pollTimer = setInterval(fetchPresenceData, 2000);  
 });
 
 onUnmounted(() => {
@@ -88,7 +81,6 @@ onUnmounted(() => {
     <header class="dashboard-header">
       <h1>🟢 Live Presence Matrix</h1>
       
-      <!-- Added Switcher UI to make testing multiple clients locally dead simple -->
       <div class="session-badge">
         <label for="identity-select">View As: </label>
         <select id="identity-select" v-model="currentUserId" class="context-select">
@@ -199,11 +191,11 @@ onUnmounted(() => {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: #747480; /* Default Offline Gray */
+  background: #747480;
 }
 
 .is-online .status-indicator {
-  background: #4caf50; /* Online Green */
+  background: #4caf50; 
   box-shadow: 0 0 8px #4caf50;
 }
 

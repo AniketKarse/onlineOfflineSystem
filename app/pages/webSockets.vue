@@ -1,4 +1,3 @@
-<!-- pages/index.vue -->
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 
@@ -29,17 +28,14 @@ const connectWebSocket = () => {
   ws.onopen = () => {
     connectionStatus.value = 'Connected';
     
-    // Send immediate heartbeat on connection to declare identity
     sendHeartbeatEvent();
 
-    // Ingress Stream: Schedule heartbeats every 4 seconds
     heartbeatInterval = setInterval(sendHeartbeatEvent, 4000);
   };
 
   ws.onmessage = (event) => {
     const payload = JSON.parse(event.data);
     if (payload.type === 'presence_update') {
-      // Egress Capture: Update reactive state array directly from the push stream
       presenceRawData.value = payload.data;
     }
   };
@@ -56,7 +52,6 @@ const sendHeartbeatEvent = () => {
   }
 };
 
-// Sort online users to the top
 const sortedDashboardUsers = computed(() => {
   return [...presenceRawData.value]
     .filter(user => user.id !== currentUserId.value)
@@ -76,7 +71,6 @@ const formatRelativeTime = (lastSeenEpoch: number) => {
   return 'was online just now';
 };
 
-// Re-authenticate immediately if user toggles select menu
 watch(currentUserId, () => {
   sendHeartbeatEvent();
 });
