@@ -10,6 +10,7 @@ interface UserPresence {
   isOnline: boolean;
   lastSeen: number;
 }
+// important
 
 const presenceRawData = ref<UserPresence[]>([]);
 let heartbeatTimer: ReturnType<typeof setInterval> | null = null;
